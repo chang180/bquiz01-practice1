@@ -86,10 +86,12 @@
 				</table>
 
 				<!-- 中間的內容並不明顯，看仔細點，挖掉之後再放回去 -->
-				<!-- 也是要做判斷，但直接從index.php中做好的copy過來改即可 -->
+				<!-- 也是要做判斷，但直接從index.php中做好的copy過來改即可，或是這裏做好再copy到index去 -->
 				<?php
+				//已經縮到只剩區區3行，起手式一定要記牢
 				$do = $_GET['do'] ?? "title";
-				$file = "./backend/" . $do . ".php";
+				// $file = "./backend/" . $do . ".php";
+				$file = sprintf("backend/%s.php",$do);
 				include file_exists($file) ? $file : "backend/title.php";
 				// include "front/home.php"; 
 				?>

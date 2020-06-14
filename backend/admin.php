@@ -23,7 +23,7 @@
 									<tr class="cent">
 										<td><input type="text" name="acc[]" value="<?= $value['acc']; ?>"></td>
 										<td><input type="password" name="pw[]" value="<?= $value['pw'];?>"></td>
-										<td><input type="checkbox" name="del[]" value="<?$value['id'];?>"></td>
+										<td><input type="checkbox" name="del[]" value="<?=$value['id'];?>"></td>
 										<input type="hidden" name='id[]' value="<?= $value['id']; ?>">
 									</tr>
 
