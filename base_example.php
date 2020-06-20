@@ -1,13 +1,13 @@
+<!-- 本日測試精簡可短至幾行 -->
+<!-- 雖然有縮減行數，但還是會出錯，必須練到完全無錯誤，或是出錯能馬上找出問題並修正 -->
 <?php
-//繼續降低行數
 session_start();
 date_default_timezone_set("Asia/Taipei");
-
 class DB
 {
     private $table;
     private $pdo;
-    private $dsn = "mysql:host=localhost;dbname=db02;charset=utf8";
+    private $dsn = "mysql:host=localhost;charset=utf8;dbname=db02";
     private $root = "root";
     private $password = "";
     public function __construct($table)
@@ -23,7 +23,7 @@ class DB
             foreach ($arg[0] as $key => $value) $tmp[] = "`$key`='$value'";
             $sql .= " WHERE " . implode(" && ", $tmp);
         }
-        $sql .= $arg[1] ?? '';
+        if (!empty($arg[1])) $sql .= $arg[1];
         return $this->pdo->query($sql)->fetchAll();
     }
 
@@ -32,7 +32,7 @@ class DB
         $sql = "DELETE FROM $this->table ";
         if (is_array($arg)) {
             foreach ($arg as $key => $value) $tmp[] = "`$key`='$value'";
-            $sql .= "  WHERE " . implode(" && ", $tmp);
+            $sql .= " WHERE " . implode(" && ", $tmp);
         } else $sql .= " WHERE `id`='$arg'";
         return $this->pdo->exec($sql);
     }
@@ -47,14 +47,13 @@ class DB
         return $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function count(...$arg)
-    {
-        $sql = "SELECT COUNT(*) FROM $this->table ";
-        if (is_array($arg[0])) {
-            foreach ($arg[0] as $key => $value) $tmp[] = "`$key`='$value'";
-            $sql .= " WHERE " . implode(" && ", $tmp);
+    public function count(...$arg){
+        $sql="SELECT COUNT(*) FROM $this->table ";
+        if(is_array($arg[0])){
+        foreach($arg[0] as $key=>$value) $tmp[]="`$key`='$value'";
+        $sql.=" WHERE ".implode(" && ",$tmp);
         }
-        $sql .= $arg[1] ?? '';
+        if(!empty($arg[1])) $sql.=$arg[1];
         return $this->pdo->query($sql)->fetchColumn();
     }
 
@@ -67,32 +66,19 @@ class DB
     {
         if (isset($arg['id'])) {
             foreach ($arg as $key => $value) $tmp[] = "`$key`='$value'";
-            $sql = sprintf("UPDATE %s SET %s WHERE `id`='%s'", $this->table, implode(",", $tmp), $arg['id']);
-        } else $sql = sprintf("INSERT INTO %s (`%s`) VALUES ('%s')", $this->table, implode("`,`", array_keys($arg)), implode("','", $arg));
+            //update
+            $sql = sprintf("UPDATE %s SET %s WHERE `id`=%s", $this->table,implode(",", $tmp), $arg['id']);
+            //insert
+        }else $sql = sprintf("INSERT INTO %s (`%s`) VALUES ('%s')", $this->table, implode("`,`", array_keys($arg)), implode("','", $arg));
         return $this->pdo->exec($sql);
     }
 }
 
-function to($sql)
+function to($url)
 {
-    header("location:" . $sql);
+    header("location:" . $url);
 }
 
-$Title = new DB('title');
-$Ad = new DB('ad');
-$Mvim = new DB('mvim');
-$Image = new DB('image');
-$News = new DB('news');
-$Admin = new DB('Admin');
-$Total = new DB('total');
-$menu = new DB('menu');
-$Bottom = new DB('bottom');
-$title = $Title->find(1);
-$bottom = $Bottom->find(1);
 
-if (empty($_SESSION['visited'])) {
-    $total = $Title->find(1);
-    $total['total'] = $_SESSION['visited']++;
-    $Title->save($total);
-    $total = $Title->find(1);
-}
+
+?>
