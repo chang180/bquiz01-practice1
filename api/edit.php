@@ -41,7 +41,6 @@ foreach ($_POST['id'] as $key => $id) {
         $db->save($row);
     }
 }
-
 to("../admin.php?do=$table");
 
 
