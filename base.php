@@ -67,12 +67,12 @@ function to($url){
 }
 
 $Title=new DB('title');
-$total=$Title->find(1);
 $Ad=new DB('ad');
 $Mvim=new DB('mvim');
 $News=new DB('news');
 $Image=new DB('image');
 $Total=new DB('total');
+$total=$Total->find(1);
 $Bottom=new DB('bottom');
 $Admin=new DB('admin');
 $Menu=new DB('menu');
